@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invitación | Revelación de Género</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --pink: #ef8da8;
+      --pink-strong: #e86f98;
+      --pink-soft: #fdeaf0;
+      --blue: #8bbfe0;
+      --blue-strong: #67a9d6;
+      --blue-soft: #eaf6ff;
+      --gold: #c7a35a;
+      --text: #3b3742;
+      --muted: #6f6874;
+      --paper: #fffdf9;
+      --shadow: 0 18px 45px rgba(99, 73, 73, 0.12);
+      --shadow-soft: 0 10px 28px rgba(99, 73, 73, 0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: 'Montserrat', sans-serif;
+      color: var(--text);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 12% 10%, rgba(239, 141, 168, .20), transparent 25%),
+        radial-gradient(circle at 88% 12%, rgba(139, 191, 224, .18), transparent 26%),
+        linear-gradient(180deg, #fff8f8 0%, #ffffff 52%, #fff7fb 100%);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .page {
+      width: min(100%, 480px);
+      min-height: 100svh;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 0% 75%, rgba(239, 141, 168, .11), transparent 24%),
+        radial-gradient(circle at 100% 82%, rgba(139, 191, 224, .13), transparent 26%),
+        rgba(255, 255, 255, .38);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .screen {
+      position: relative;
+      min-height: 100svh;
+      overflow: hidden;
+    }
+
+    .screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(199, 163, 90, .48) 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(239, 141, 168, .18) 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(139, 191, 224, .18) 1px, transparent 1.5px);
+      background-size: 42px 42px, 64px 64px, 74px 74px;
+      background-position: 0 0, 20px 26px, 15px 8px;
+      opacity: .45;
+    }
+
+    .cover-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(18px, 5vw, 28px);
+    }
+
+    .main-screen {
+      padding: clamp(18px, 5vw, 26px);
+      overflow-y: auto;
+    }
+
+    .decor-heart,
+    .decor-ribbon,
+    .decor-flower {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .decor-heart {
+      font-size: 15px;
+      opacity: .82;
+      filter: drop-shadow(0 6px 8px rgba(0, 0, 0, .06));
+    }
+
+    .decor-ribbon {
+      width: 150px;
+      height: 26px;
+      border-radius: 50%;
+      border-top: 13px solid rgba(239, 141, 168, .28);
+      transform: rotate(-32deg);
+      opacity: .78;
+    }
+
+    .decor-flower {
+      width: 76px;
+      height: 140px;
+      opacity: .55;
+    }
+
+    .decor-flower::before,
+    .decor-flower::after {
+      content: '';
+      position: absolute;
+      background: rgba(165, 142, 82, .30);
+      width: 1px;
+      height: 110px;
+      left: 38px;
+      top: 20px;
+      transform: rotate(16deg);
+    }
+
+    .decor-flower::after {
+      left: 50px;
+      height: 90px;
+      transform: rotate(-12deg);
+    }
+
+    .flower-dot {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .95);
+      box-shadow:
+        12px 18px 0 rgba(255, 255, 255, .9),
+        -8px 32px 0 rgba(255, 255, 255, .9),
+        16px 45px 0 rgba(255, 255, 255, .9),
+        -4px 62px 0 rgba(255, 255, 255, .9),
+        22px 78px 0 rgba(255, 255, 255, .9);
+      left: 18px;
+      top: 12px;
+    }
+
+    /* =========================
+       PANTALLA 1: PORTADA
+    ========================= */
+    .cover-card {
+      width: 100%;
+      max-width: 420px;
+      min-height: min(760px, calc(100svh - 36px));
+      max-height: none;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      padding: clamp(16px, 4vw, 24px);
+      border-radius: clamp(26px, 7vw, 34px);
+      border: 1px solid rgba(199, 163, 90, .48);
+      background:
+        radial-gradient(circle at 0% 86%, rgba(239, 141, 168, .18), transparent 25%),
+        radial-gradient(circle at 100% 92%, rgba(139, 191, 224, .20), transparent 27%),
+        rgba(255, 255, 255, .79);
+      box-shadow: var(--shadow);
+    }
+
+    .envelope {
+      position: absolute;
+      left: 50%;
+      bottom: clamp(116px, 19svh, 160px);
+      width: 120%;
+      height: clamp(190px, 30svh, 250px);
+      transform: translateX(-50%);
+      background: linear-gradient(145deg, #ffdce5, #f4b8c9);
+      clip-path: polygon(0 30%, 50% 76%, 100% 30%, 100% 100%, 0 100%);
+      opacity: .88;
+      z-index: 0;
+      filter: drop-shadow(0 -8px 20px rgba(147, 92, 108, .08));
+    }
+
+    .gold-seal {
+      position: absolute;
+      left: 50%;
+      bottom: clamp(222px, 36svh, 292px);
+      transform: translateX(-50%);
+      width: clamp(38px, 11vw, 48px);
+      height: clamp(38px, 11vw, 48px);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, #f5dc8f, var(--gold));
+      color: white;
+      font-size: clamp(19px, 5vw, 24px);
+      box-shadow: 0 10px 20px rgba(159, 120, 51, .25);
+      z-index: 3;
+    }
+
+    .invite-paper {
+      width: 100%;
+      min-height: 0;
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding:
+        clamp(34px, 8svh, 74px)
+        clamp(14px, 5vw, 24px)
+        clamp(82px, 15svh, 132px);
+      margin: 0 auto;
+      background: rgba(255, 253, 249, .86);
+      border-radius: 46% 46% 20px 20px / 15% 15% 20px 20px;
+      border: 1px solid rgba(199, 163, 90, .20);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .72);
+      text-align: center;
+    }
+
+    .heart-logo {
+      width: clamp(48px, 14vw, 64px);
+      height: clamp(38px, 11vw, 50px);
+      margin: 0 auto clamp(5px, 1.5svh, 10px);
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .heart-logo::before,
+    .heart-logo::after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      width: 52%;
+      height: 85%;
+      border-radius: 30px 30px 0 0;
+      transform-origin: bottom center;
+    }
+
+    .heart-logo::before {
+      left: 11%;
+      background: rgba(239, 141, 168, .70);
+      transform: rotate(-45deg);
+    }
+
+    .heart-logo::after {
+      right: 11%;
+      background: rgba(139, 191, 224, .74);
+      transform: rotate(45deg);
+    }
+
+    .heart-logo span {
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      z-index: 2;
+      transform: translate(-50%, -50%);
+      color: var(--gold);
+      font-size: clamp(13px, 4vw, 17px);
+    }
+
+    .gold-line {
+      width: clamp(92px, 32vw, 124px);
+      height: 1px;
+      position: relative;
+      flex: 0 0 auto;
+      margin: clamp(7px, 1.7svh, 13px) auto clamp(10px, 2.2svh, 18px);
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .gold-line::after {
+      content: '♡';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -55%);
+      color: var(--gold);
+      background: var(--paper);
+      padding: 0 8px;
+      font-size: 13px;
+    }
+
+    .invitee {
+      margin: 0 0 clamp(10px, 2.2svh, 18px);
+      color: #615b65;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(14px, 4vw, 17px);
+      letter-spacing: .2px;
+    }
+
+    .invitee strong {
+      color: var(--pink-strong);
+      font-weight: 600;
+    }
+
+    .cover-title {
+      margin: 0;
+      color: #3d3a45;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(35px, 11.2vw, 53px);
+      line-height: 1.08;
+      font-weight: 600;
+    }
+
+    .cover-title small {
+      display: block;
+      margin-top: clamp(8px, 1.8svh, 12px);
+      font-size: .56em;
+      line-height: 1.1;
+      font-weight: 500;
+    }
+
+    .cover-title span {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      margin: clamp(8px, 1.8svh, 12px) auto 0;
+      padding: 10px 10px;
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(40px, 12.4vw, 58px);
+      line-height: 1.18;
+      font-weight: 400;
+      white-space: normal;
+      overflow: visible;
+      overflow-wrap: normal;
+      background: linear-gradient(90deg, var(--pink), var(--blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .cover-subtitle {
+      max-width: 285px;
+      margin: clamp(12px, 2.7svh, 24px) auto 0;
+      color: #5f5965;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(14px, 4vw, 17px);
+      line-height: 1.45;
+    }
+
+    .primary-button,
+    .open-button {
+      position: relative;
+      z-index: 4;
+      border: 0;
+      border-radius: 999px;
+      padding: clamp(15px, 4vw, 18px) 24px;
+      color: #fff;
+      font-weight: 700;
+      font-size: clamp(15px, 4.3vw, 17px);
+      letter-spacing: .2px;
+      cursor: pointer;
+      background: linear-gradient(100deg, #ea7ea1, #f5a4b6);
+      box-shadow: 0 14px 28px rgba(239, 141, 168, .32);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+      text-decoration: none;
+    }
+
+    .open-button {
+      flex: 0 0 auto;
+      width: min(100%, 310px);
+      margin: clamp(16px, 3svh, 26px) auto 0;
+    }
+
+    .primary-button:hover,
+    .open-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 32px rgba(239, 141, 168, .36);
+    }
+
+    .primary-button:active,
+    .open-button:active {
+      transform: translateY(0) scale(.99);
+    }
+
+    .primary-button:disabled,
+    .open-button:disabled {
+      cursor: not-allowed;
+      opacity: .72;
+      transform: none;
+    }
+
+    /* =========================
+       PANTALLA 2: INVITACIÓN ABIERTA
+    ========================= */
+    .main-content {
+      position: relative;
+      z-index: 2;
+      min-height: calc(100svh - clamp(36px, 10vw, 52px));
+      display: flex;
+      flex-direction: column;
+      padding: 6px 0 24px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-height: 40px;
+      margin-bottom: clamp(8px, 2.2svh, 18px);
+    }
+
+    .music-pill,
+    .prediction-pill {
+      border: 1px solid rgba(239, 141, 168, .22);
+      background: rgba(255,255,255,.82);
+      border-radius: 999px;
+      padding: 9px 13px;
+      box-shadow: 0 9px 20px rgba(0,0,0,.05);
+      font-size: 12px;
+      color: #625b66;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      cursor: pointer;
+      min-height: 36px;
+      white-space: nowrap;
+    }
+
+    .music-pill {
+      flex: 1;
+      max-width: 210px;
+    }
+
+    .prediction-pill {
+      color: #6b6070;
+      background: linear-gradient(135deg, rgba(253, 234, 240, .92), rgba(234, 246, 255, .92));
+      border-color: rgba(199, 163, 90, .20);
+    }
+
+    .prediction-pill.selected {
+      color: #fff;
+      background: linear-gradient(100deg, var(--pink), var(--blue));
+      border-color: rgba(255,255,255,.60);
+    }
+
+    .main-hero {
+      text-align: center;
+      padding: clamp(8px, 2.2svh, 16px) 4px clamp(12px, 2.5svh, 20px);
+    }
+
+    .hero-hearts {
+      width: 78px;
+      height: 48px;
+      margin: 0 auto clamp(8px, 2svh, 14px);
+      position: relative;
+    }
+
+    .hero-hearts::before,
+    .hero-hearts::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      width: 38px;
+      height: 34px;
+      border-radius: 26px 26px 5px 5px;
+      transform-origin: bottom center;
+      box-shadow: 0 10px 18px rgba(90, 65, 65, .06);
+    }
+
+    .hero-hearts::before {
+      left: 9px;
+      background: linear-gradient(135deg, rgba(255, 196, 210, .92), rgba(239, 141, 168, .90));
+      transform: rotate(-45deg);
+    }
+
+    .hero-hearts::after {
+      right: 9px;
+      background: linear-gradient(135deg, rgba(218, 240, 255, .96), rgba(139, 191, 224, .90));
+      transform: rotate(45deg);
+    }
+
+    .hero-hearts span {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      z-index: 3;
+      color: var(--gold);
+      font-size: 17px;
+    }
+
+    .main-title {
+      margin: 0;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 7.8vw, 39px);
+      line-height: 1.18;
+      font-weight: 500;
+      color: #373440;
+    }
+
+    .main-subtitle {
+      max-width: 320px;
+      margin: clamp(10px, 2svh, 14px) auto 0;
+      color: var(--muted);
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(15px, 4vw, 17px);
+      line-height: 1.45;
+    }
+
+    .tiny-heart-line {
+      width: 96px;
+      height: 1px;
+      margin: clamp(12px, 2.4svh, 18px) auto 0;
+      position: relative;
+      background: linear-gradient(90deg, transparent, rgba(199, 163, 90, .72), transparent);
+    }
+
+    .tiny-heart-line::after {
+      content: '♥';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -52%);
+      color: var(--gold);
+      background: #fffefd;
+      padding: 0 8px;
+      font-size: 12px;
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(7px, 2vw, 10px);
+      margin: 0 0 clamp(14px, 3svh, 20px);
+    }
+
+    .time-box {
+      text-align: center;
+      padding: clamp(12px, 3.4vw, 16px) 4px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .90);
+      border: 1px solid rgba(255, 255, 255, .76);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .time-box strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(27px, 8vw, 36px);
+      line-height: 1;
+      color: #373440;
+      font-weight: 500;
+    }
+
+    .time-box span {
+      display: block;
+      margin-top: 7px;
+      font-size: clamp(9px, 2.7vw, 11px);
+      color: #58515f;
+      font-weight: 600;
+      letter-spacing: .25px;
+      text-transform: uppercase;
+    }
+
+    .info-card,
+    .simple-card,
+    .note-card,
+    .prediction-card {
+      background: rgba(255, 255, 255, .90);
+      border: 1px solid rgba(255, 255, 255, .78);
+      border-radius: 26px;
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(10px);
+    }
+
+    .info-card {
+      padding: clamp(16px, 4.5vw, 22px);
+      margin-bottom: clamp(12px, 2.8svh, 16px);
+    }
+
+    .detail-row {
+      display: grid;
+      grid-template-columns: 45px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 13px 0;
+      border-bottom: 1px solid rgba(199, 163, 90, .14);
+    }
+
+    .detail-row:first-child {
+      padding-top: 0;
+    }
+
+    .detail-row:last-of-type {
+      border-bottom: 0;
+    }
+
+    .detail-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 21px;
+      background: var(--pink-soft);
+    }
+
+    .detail-row:nth-child(2) .detail-icon {
+      background: var(--blue-soft);
+    }
+
+    .detail-row b {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+      color: #393640;
+    }
+
+    .detail-row span {
+      display: block;
+      color: var(--muted);
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .map-button {
+      width: 100%;
+      margin-top: 16px;
+    }
+
+    .simple-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 17px;
+      margin-bottom: clamp(12px, 2.8svh, 16px);
+    }
+
+    .simple-card-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .music-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--blue-soft);
+      font-size: 21px;
+    }
+
+    .prediction-card {
+      padding: 18px;
+      margin-bottom: clamp(12px, 2.8svh, 16px);
+      text-align: center;
+    }
+
+    .prediction-card h3 {
+      margin: 0 0 5px;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: #393640;
+    }
+
+    .prediction-card p {
+      margin: 0 auto 14px;
+      color: var(--muted);
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .prediction-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .prediction-option {
+      border: 1px solid rgba(199, 163, 90, .20);
+      border-radius: 20px;
+      min-height: 76px;
+      padding: 12px 10px;
+      cursor: pointer;
+      background: rgba(255,255,255,.75);
+      color: #4a4650;
+      box-shadow: 0 8px 18px rgba(99, 73, 73, 0.07);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+    }
+
+    .prediction-option:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(99, 73, 73, 0.10);
+    }
+
+    .prediction-option .emoji {
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .prediction-option strong {
+      font-size: 14px;
+    }
+
+    .prediction-option.selected-girl {
+      color: #fff;
+      border-color: rgba(255,255,255,.70);
+      background: linear-gradient(135deg, #ef8da8, #f6b2c3);
+    }
+
+    .prediction-option.selected-boy {
+      color: #fff;
+      border-color: rgba(255,255,255,.70);
+      background: linear-gradient(135deg, #8bbfe0, #67a9d6);
+    }
+
+    .prediction-helper {
+      min-height: 20px;
+      margin: 12px 0 0 !important;
+      color: var(--pink-strong) !important;
+      font-size: 13px !important;
+      font-family: 'Montserrat', sans-serif !important;
+      font-weight: 600;
+    }
+
+    .note-card {
+      position: relative;
+      padding: clamp(18px, 4.6vw, 22px) clamp(18px, 4.6vw, 24px);
+      margin-bottom: clamp(16px, 3svh, 22px);
+      text-align: center;
+      background: linear-gradient(180deg, rgba(248, 252, 255, .92), rgba(255, 253, 255, .94));
+      border-color: rgba(139, 191, 224, .25);
+    }
+
+    .note-card::before {
+      content: '♡';
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      width: 30px;
+      height: 24px;
+      transform: translateX(-50%);
+      display: grid;
+      place-items: center;
+      color: var(--blue);
+      background: #fff;
+      border-radius: 999px;
+    }
+
+    .note-card p {
+      margin: 0;
+      color: #5f5965;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(14px, 3.8vw, 16px);
+      line-height: 1.55;
+    }
+
+    .confirm-button {
+      width: 100%;
+      margin-bottom: 10px;
+      padding-block: 17px;
+      font-size: 16px;
+    }
+
+    .closing-text {
+      margin: clamp(10px, 2svh, 16px) 0 0;
+      text-align: center;
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(34px, 10vw, 45px);
+      line-height: 1;
+      background: linear-gradient(90deg, var(--pink), var(--blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .fade-out {
+      animation: fadeOut .45s ease both;
+    }
+
+    .fade-in-up {
+      animation: fadeInUp .58s ease both;
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateY(-10px) scale(.985);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* =========================
+       PANTALLA 3: POPUP DE CONFIRMACIÓN
+    ========================= */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background: rgba(48, 40, 47, .36);
+      backdrop-filter: blur(6px);
+      animation: modalBackdropIn .28s ease both;
+    }
+
+    .modal-card {
+      width: min(100%, 380px);
+      position: relative;
+      overflow: hidden;
+      border-radius: 34px;
+      padding: 36px 24px 26px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 15% 18%, rgba(239, 141, 168, .12), transparent 22%),
+        radial-gradient(circle at 88% 20%, rgba(139, 191, 224, .14), transparent 24%),
+        rgba(255, 253, 249, .98);
+      border: 1px solid rgba(255, 255, 255, .82);
+      box-shadow: 0 24px 70px rgba(57, 43, 50, .25);
+      animation: modalPopIn .48s cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    .balloons {
+      width: 132px;
+      height: 112px;
+      margin: 0 auto 8px;
+      position: relative;
+    }
+
+    .balloon {
+      position: absolute;
+      top: 0;
+      width: 58px;
+      height: 74px;
+      border-radius: 50% 50% 45% 45%;
+      box-shadow: inset -8px -10px 12px rgba(0,0,0,.05), 0 9px 18px rgba(0,0,0,.08);
+      animation: balloonFloat 2.6s ease-in-out infinite;
+    }
+
+    .balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
+      width: 1px;
+      height: 36px;
+      background: rgba(199, 163, 90, .45);
+      transform: translateX(-50%);
+    }
+
+    .balloon.pink {
+      left: 10px;
+      background: linear-gradient(145deg, #ffd5df, var(--pink));
+    }
+
+    .balloon.blue {
+      right: 10px;
+      background: linear-gradient(145deg, #d8efff, var(--blue));
+      animation-delay: .18s;
+    }
+
+    .balloon-knot {
+      position: absolute;
+      left: 50%;
+      bottom: 12px;
+      transform: translateX(-50%);
+      color: var(--gold);
+      font-size: 18px;
+      z-index: 3;
+    }
+
+    .modal-card h2 {
+      margin: 8px 0 12px;
+      color: #393640;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(31px, 8.8vw, 40px);
+      line-height: 1.12;
+      font-weight: 600;
+    }
+
+    .modal-card p {
+      max-width: 285px;
+      margin: 0 auto 22px;
+      color: var(--muted);
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(16px, 4.2vw, 18px);
+      line-height: 1.6;
+    }
+
+    .modal-button {
+      width: min(100%, 290px);
+      margin: 0 auto;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -24px;
+      width: 8px;
+      height: 14px;
+      border-radius: 2px;
+      opacity: .9;
+      animation: confettiFall 2.5s linear infinite;
+    }
+
+    .sparkle {
+      position: absolute;
+      color: var(--gold);
+      opacity: .8;
+      animation: sparklePulse 1.8s ease-in-out infinite;
+    }
+
+    .modal-heart {
+      position: absolute;
+      color: var(--pink);
+      font-size: 15px;
+      animation: heartFloat 2.8s ease-in-out infinite;
+      opacity: .8;
+    }
+
+    @keyframes modalBackdropIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes modalPopIn {
+      from {
+        opacity: 0;
+        transform: translateY(22px) scale(.94);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes balloonFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(-28px) rotate(0deg);
+        opacity: 0;
+      }
+      14% { opacity: .95; }
+      100% {
+        transform: translateY(450px) rotate(280deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes sparklePulse {
+      0%, 100% { transform: scale(.86); opacity: .45; }
+      50% { transform: scale(1.12); opacity: 1; }
+    }
+
+    @keyframes heartFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+
+    @media (min-width: 381px) {
+      .cover-title {
+        font-size: clamp(41px, 10.2vw, 54px);
+      }
+
+      .cover-title span {
+        font-size: clamp(46px, 11.6vw, 58px);
+      }
+    }
+
+    @media (max-width: 374px) {
+      .cover-screen,
+      .main-screen {
+        padding: 14px;
+      }
+
+      .cover-card {
+        min-height: calc(100svh - 28px);
+        padding: 14px;
+      }
+
+      .invite-paper {
+        padding-top: 30px;
+        padding-bottom: 82px;
+      }
+
+      .cover-title {
+        font-size: clamp(32px, 10.4vw, 39px);
+      }
+
+      .cover-title span {
+        font-size: clamp(38px, 11.8vw, 46px);
+        line-height: 1.2;
+      }
+
+      .cover-subtitle {
+        font-size: 14px;
+      }
+
+      .main-title {
+        font-size: 27px;
+      }
+
+      .info-card {
+        padding: 16px;
+      }
+
+      .music-pill,
+      .prediction-pill {
+        font-size: 11px;
+        padding: 8px 10px;
+      }
+    }
+
+    @media (max-height: 720px) {
+      .cover-card {
+        min-height: calc(100svh - 28px);
+      }
+
+      .invite-paper {
+        padding-top: 24px;
+        padding-bottom: 76px;
+      }
+
+      .heart-logo {
+        transform: scale(.88);
+        margin-bottom: 0;
+      }
+
+      .gold-line {
+        margin-top: 6px;
+        margin-bottom: 9px;
+      }
+
+      .invitee {
+        margin-bottom: 9px;
+      }
+
+      .cover-title {
+        font-size: clamp(31px, 9.6vw, 42px);
+      }
+
+      .cover-title span {
+        font-size: clamp(36px, 11.3vw, 46px);
+        line-height: 1.22;
+      }
+
+      .cover-subtitle {
+        margin-top: 10px;
+        font-size: 14px;
+        line-height: 1.35;
+      }
+
+      .open-button {
+        margin-top: 14px;
+        padding-top: 14px;
+        padding-bottom: 14px;
+      }
+
+      .main-screen {
+        padding-top: 14px;
+        padding-bottom: 14px;
+      }
+
+      .main-title {
+        font-size: clamp(25px, 7vw, 32px);
+      }
+
+      .main-subtitle {
+        font-size: 14px;
+      }
+
+      .time-box {
+        padding: 11px 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="screen cover-screen" id="coverScreen" aria-label="Portada de invitación">
+      <span class="decor-ribbon" style="top: 42px; left: -42px;"></span>
+      <span class="decor-heart" style="top: 145px; right: 68px; color: var(--blue);">♥</span>
+      <span class="decor-heart" style="top: 172px; left: 85px; color: var(--pink);">♥</span>
+      <span class="decor-heart" style="bottom: 80px; left: 58px; color: var(--blue);">♥</span>
+      <span class="decor-flower" style="top: 166px; left: -20px;"><span class="flower-dot"></span></span>
+      <span class="decor-flower" style="bottom: 30px; right: -22px;"><span class="flower-dot"></span></span>
+
+      <article class="cover-card">
+        <div class="envelope" aria-hidden="true"></div>
+        <div class="gold-seal" aria-hidden="true">♥</div>
+
+        <div class="invite-paper">
+          <div class="heart-logo" aria-hidden="true"><span>♥</span></div>
+          <div class="gold-line" aria-hidden="true"></div>
+
+          <p class="invitee">Para: <strong id="guestName">Barbara</strong></p>
+
+          <h1 class="cover-title">
+            Invitación
+            <small>a nuestra</small>
+            <span>Revelación de género</span>
+          </h1>
+
+          <div class="gold-line" aria-hidden="true"></div>
+          <p class="cover-subtitle">Una tarde especial con música y mucha emoción</p>
+        </div>
+
+        <button class="open-button" type="button" id="openInvitation">
+          Abrir invitación <span aria-hidden="true">♡</span>
+        </button>
+      </article>
+    </section>
+
+    <section class="screen main-screen hidden" id="mainScreen" aria-label="Detalle de invitación">
+      <span class="decor-ribbon" style="top: 118px; left: -54px;"></span>
+      <span class="decor-ribbon" style="bottom: 80px; right: -64px; transform: rotate(-38deg);"></span>
+      <span class="decor-flower" style="top: 300px; left: -28px;"><span class="flower-dot"></span></span>
+      <span class="decor-flower" style="bottom: 130px; right: -28px;"><span class="flower-dot"></span></span>
+      <span class="decor-heart" style="top: 160px; left: 42px; color: var(--gold);">♡</span>
+      <span class="decor-heart" style="top: 420px; right: 38px; color: var(--blue);">♥</span>
+
+      <div class="main-content">
+        <header class="top-bar fade-in-up">
+          <button class="music-pill" id="musicButton" type="button">🎵 Música y celebración</button>
+          <button class="prediction-pill" id="topPredictionButton" type="button">🎀 Mi predicción</button>
+        </header>
+
+        <section class="main-hero fade-in-up">
+          <div class="hero-hearts" aria-hidden="true"><span>♥</span></div>
+          <h2 class="main-title">Nos encantaría que<br>nos acompañes a descubrir<br>esta hermosa sorpresa</h2>
+          <p class="main-subtitle">Tu presencia hará este momento aún más especial</p>
+          <div class="tiny-heart-line" aria-hidden="true"></div>
+        </section>
+
+        <section class="countdown fade-in-up" aria-label="Cuenta regresiva">
+          <div class="time-box"><strong id="days">00</strong><span>Días</span></div>
+          <div class="time-box"><strong id="hours">00</strong><span>Horas</span></div>
+          <div class="time-box"><strong id="minutes">00</strong><span>Minutos</span></div>
+          <div class="time-box"><strong id="seconds">00</strong><span>Segundos</span></div>
+        </section>
+
+        <section class="info-card fade-in-up">
+          <div class="detail-row">
+            <div class="detail-icon">📅</div>
+            <div>
+              <b>Fecha</b>
+              <span>Sábado, 12 de setiembre de 2026</span>
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-icon">🕘</div>
+            <div>
+              <b>Hora</b>
+              <span>4:00 p. m.</span>
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-icon">📍</div>
+            <div>
+              <b>Ubicación</b>
+              <span>X3Q5+334,<br>C. Las Perdices, Lima 15009</span>
+            </div>
+          </div>
+
+          <a class="primary-button map-button" href="https://maps.app.goo.gl/jFbBxC451qcqFSHu9" target="_blank" rel="noopener noreferrer">
+            📍 Ver ubicación
+          </a>
+        </section>
+
+        <section class="prediction-card fade-in-up" id="predictionCard">
+          <h3>¿Cuál es tu predicción?</h3>
+          <p>Antes de confirmar, elige qué crees que será.</p>
+
+          <div class="prediction-options">
+            <button class="prediction-option" type="button" data-prediction="Niña" id="girlButton">
+              <span class="emoji">🎀</span>
+              <strong>Team Niña</strong>
+            </button>
+
+            <button class="prediction-option" type="button" data-prediction="Niño" id="boyButton">
+              <span class="emoji">🧢</span>
+              <strong>Team Niño</strong>
+            </button>
+          </div>
+
+          <p class="prediction-helper" id="predictionHelper">Selecciona una opción para continuar.</p>
+        </section>
+
+        <section class="note-card fade-in-up">
+          <p>Para que todos podamos disfrutar plenamente de esta velada, hemos reservado este encuentro para adultos. Gracias por acompañarnos con tanto cariño y comprensión.</p>
+        </section>
+
+        <button class="primary-button confirm-button fade-in-up" type="button" id="confirmButton">
+          ♡ Confirmar asistencia
+        </button>
+
+        <p class="closing-text fade-in-up">¡Te esperamos!</p>
+      </div>
+    </section>
+  </main>
+
+  <section class="modal-backdrop hidden" id="successModal" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+    <div class="modal-card">
+      <span class="sparkle" style="top: 28px; left: 30px;">✦</span>
+      <span class="sparkle" style="top: 72px; right: 42px; animation-delay: .35s;">✧</span>
+      <span class="sparkle" style="bottom: 115px; left: 36px; animation-delay: .65s;">✦</span>
+      <span class="modal-heart" style="top: 106px; left: 42px;">♥</span>
+      <span class="modal-heart" style="right: 38px; bottom: 118px; color: var(--blue); animation-delay: .45s;">♥</span>
+
+      <span class="confetti-piece" style="left: 10%; background: var(--pink); animation-delay: 0s;"></span>
+      <span class="confetti-piece" style="left: 22%; background: var(--blue); animation-delay: .22s;"></span>
+      <span class="confetti-piece" style="left: 36%; background: var(--gold); animation-delay: .08s;"></span>
+      <span class="confetti-piece" style="left: 52%; background: var(--pink); animation-delay: .45s;"></span>
+      <span class="confetti-piece" style="left: 70%; background: var(--blue); animation-delay: .18s;"></span>
+      <span class="confetti-piece" style="left: 86%; background: var(--gold); animation-delay: .35s;"></span>
+
+      <div class="balloons" aria-hidden="true">
+        <span class="balloon pink"></span>
+        <span class="balloon blue"></span>
+        <span class="balloon-knot">♡</span>
+      </div>
+
+      <h2 id="successTitle">¡Qué alegría contar contigo!</h2>
+      <p id="successMessage">Gracias por acompañarnos en un día tan especial.</p>
+      <button class="primary-button modal-button" type="button" id="closeModal">
+        Seguir viendo invitación
+      </button>
+    </div>
+  </section>
+
+  <audio id="bgMusic" loop preload="auto">
+    <source src="assets/musica.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const guestName = params.get('invitado') || 'Barbara';
+    const eventDate = new Date('2026-09-12T16:00:00-05:00');
+    const GOOGLE_SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzsArUAfJHkAf3MA94aeQFctboIiVIwlRvHYonYkDi2y7WWiNTyyXsl2-oAop-NtiYA1Q/exec';
+
+    let selectedPrediction = '';
+
+    const coverScreen = document.getElementById('coverScreen');
+    const mainScreen = document.getElementById('mainScreen');
+    const openInvitation = document.getElementById('openInvitation');
+    const musicButton = document.getElementById('musicButton');
+    const bgMusic = document.getElementById('bgMusic');
+    const successModal = document.getElementById('successModal');
+    const closeModal = document.getElementById('closeModal');
+    const confirmButton = document.getElementById('confirmButton');
+    const predictionHelper = document.getElementById('predictionHelper');
+    const topPredictionButton = document.getElementById('topPredictionButton');
+    const successMessage = document.getElementById('successMessage');
+
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+
+    document.getElementById('guestName').textContent = guestName;
+
+    openInvitation.addEventListener('click', async () => {
+      coverScreen.classList.add('fade-out');
+
+      setTimeout(() => {
+        coverScreen.classList.add('hidden');
+        mainScreen.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        updateCountdown();
+      }, 430);
+
+      await tryPlayMusic();
+    });
+
+    musicButton.addEventListener('click', async () => {
+      if (bgMusic.paused) {
+        await tryPlayMusic();
+      } else {
+        bgMusic.pause();
+        musicButton.textContent = '🔇 Música pausada';
+      }
+    });
+
+    topPredictionButton.addEventListener('click', () => {
+      document.getElementById('predictionCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    document.querySelectorAll('.prediction-option').forEach((button) => {
+      button.addEventListener('click', () => {
+        selectedPrediction = button.dataset.prediction;
+        setPredictionSelected(selectedPrediction);
+      });
+    });
+
+    confirmButton.addEventListener('click', async () => {
+      if (!selectedPrediction) {
+        predictionHelper.textContent = 'Primero selecciona Team Niña o Team Niño.';
+        document.getElementById('predictionCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      confirmButton.disabled = true;
+      confirmButton.textContent = 'Guardando confirmación...';
+
+      await saveConfirmation();
+
+      confirmButton.textContent = '♡ Confirmación registrada';
+      successMessage.textContent = `Gracias por acompañarnos en un día tan especial. Tu predicción fue: ${selectedPrediction}.`;
+      successModal.classList.remove('hidden');
+    });
+
+    closeModal.addEventListener('click', () => {
+      successModal.classList.add('hidden');
+    });
+
+    successModal.addEventListener('click', (event) => {
+      if (event.target === successModal) {
+        successModal.classList.add('hidden');
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        successModal.classList.add('hidden');
+      }
+    });
+
+    function setPredictionSelected(prediction) {
+      const girlButton = document.getElementById('girlButton');
+      const boyButton = document.getElementById('boyButton');
+
+      girlButton.classList.remove('selected-girl');
+      boyButton.classList.remove('selected-boy');
+
+      if (prediction === 'Niña') {
+        girlButton.classList.add('selected-girl');
+        topPredictionButton.textContent = '🎀 Team Niña';
+      }
+
+      if (prediction === 'Niño') {
+        boyButton.classList.add('selected-boy');
+        topPredictionButton.textContent = '🧢 Team Niño';
+      }
+
+      topPredictionButton.classList.add('selected');
+      predictionHelper.textContent = `Tu predicción: ${prediction}`;
+      localStorage.setItem('prediccionRevelacionGenero', prediction);
+    }
+
+    async function saveConfirmation() {
+      const payload = {
+        nombre: guestName,
+        confirmacion: 'Si',
+        prediccion: selectedPrediction,
+        fechaConfirmacion: new Date().toISOString()
+      };
+
+      localStorage.setItem('confirmacionRevelacionGenero', JSON.stringify(payload));
+
+      if (!GOOGLE_SHEETS_ENDPOINT || GOOGLE_SHEETS_ENDPOINT.includes('PEGAR_AQUI')) {
+        console.warn('Aún falta configurar GOOGLE_SHEETS_ENDPOINT. Confirmación guardada solo en localStorage.', payload);
+        return;
+      }
+
+      try {
+        await fetch(GOOGLE_SHEETS_ENDPOINT, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+      } catch (error) {
+        console.error('No se pudo enviar la confirmación a Google Sheets:', error);
+      }
+    }
+
+    async function tryPlayMusic() {
+      try {
+        await bgMusic.play();
+        musicButton.textContent = '🎵 Música activada';
+      } catch (error) {
+        musicButton.textContent = '🎵 Tocar música';
+      }
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = Math.max(0, eventDate - now);
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      daysEl.textContent = String(days).padStart(2, '0');
+      hoursEl.textContent = String(hours).padStart(2, '0');
+      minutesEl.textContent = String(minutes).padStart(2, '0');
+      secondsEl.textContent = String(seconds).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
